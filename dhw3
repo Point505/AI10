@@ -1,0 +1,45 @@
+
+#파이선 문자열 포맷팅
+"""name = "minsu"
+score = 90
+
+print(f"{name}의 점수는 {score}입니다.")
+
+print("{}의 점수는 {}입니다.".format(name,score))"""
+
+
+
+
+#파이선 특수 문자 출력
+"""data = 3 
+fmt = "{{ {} }}".format(data)
+print(fmt)"""
+
+
+#파이선 자릿수 채우기
+"""a= 3
+mystr = f"{a:03d}" #최소 3자리수 앞에 0일때는 0으로 채워지지만
+                    # 만약 0이 아닌 숫자가 들어가면 그냥 공배긍로 나옴
+print(mystr)
+"""
+"""symbol = "B"
+print(f"{symbol:>10}")# 입력한 값의 최소 넓이를 보장
+                      # < > ^ 값에 따라 위치 정령이 달라짐
+"""                      
+"""a = 3.141592
+mystr = f"{a: 6.2f}"          #  점을 기준으로 좌측값이 좌측 공백 우측 값이 출력할 소숫점 값
+print(mystr)
+"""
+
+
+"""even_num =[]
+
+for i in range(20): # 0 ~ 19 까지
+    if i%2 ==0: # 2로 나누어 나머지가 0 인 짝수만
+        even_num.append(i)# even_num에 저장
+        
+print(even_num)"""
+
+"""even_num = [i for i in range(10) if i%2==0]
+print(even_num)"""
+
