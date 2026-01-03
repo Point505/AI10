@@ -18,7 +18,7 @@ while TreeHit < 10:
     
     
 # while문 탈출
-
+"""
 coffe = 100
 money = 100
 
@@ -34,7 +34,18 @@ while money:
        continue
     
     
-    
+    """
         
+# while + if + else, f 포맷
 
+count = 0
 
+while count <5:
+        
+ if count == 2:
+     break
+ print(f"카운트:{count}")  
+ count+=1
+ 
+else:
+    print("while 문이 정상종료 되었습니다.")
