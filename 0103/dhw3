@@ -43,3 +43,58 @@ print(even_num)"""
 """even_num = [i for i in range(10) if i%2==0]
 print(even_num)"""
 
+
+
+
+
+#파이선 튜플의 심화 패킹
+"""a = 1,2
+b =(1,2)
+
+print(a,type(a))
+
+print(b,type(b))"""
+
+#파이션 튜플의 심화 언패킹
+
+"""date = (1,2,3) # 튜플
+n1, n2,n3, = date # 튜플에 있는 각 열의 수를 각 변수에 넣어처리
+print(n1,n2,n3)"""
+
+
+"""score = (1,2,3,4,5,6)
+
+low, *other, high = score
+
+print(other)"""
+
+
+"""def hap(num1,num2,num3,num4): # 함수정의
+    return num1+num2+num3+num4 # 반환값 = 받의값의 합
+
+scores = (1,2,3,4) # 입력값
+result = hap (score[0],score[1],score[2],score[3]) # score 입력에  hap 반환값 저장
+
+print(result)"""
+
+
+"""name = ['merona','gugucon']
+price = [1000,500]
+
+z = zip(name,price)
+
+for n,p in zip(name,price):
+    print(n,p)
+    
+    """
+    
+    
+class Book:
+  def __init__(self,title,price):
+        self.title =title
+        self.price = price
+        
+myBook = Book("파이선을 이용한 비트코인 자동매매",27000)
+
+print(myBook.title,myBook.price)    
+        
