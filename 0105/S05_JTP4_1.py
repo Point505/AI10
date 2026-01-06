@@ -66,3 +66,9 @@ print(result)
 """
 
 
+def add_mul(choice,*args):
+    if choice == "add":
+        result = 0 
+        for i in args:
+            resu
+            
