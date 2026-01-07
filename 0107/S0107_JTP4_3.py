@@ -25,6 +25,12 @@
 # 이유는 개행을 할때 \n 사용하여야 하는데 경로에 \note 가 들어가면 개행으로 인식할 수 도 있기 때문이다.
 
 
+# readline 함수는 문서의 첫번쨰 줄만 읽어 들이고
+# readlines 함수는 문서 전체를 읽어들이고 줄마다 list에 저장 반복문을 사용하면 전체 내용을 볼 수 있음
+# read 함수는 그냥 전체 문서를 읽어들여서 출력
+
+
+
 
 
 ## 💡 학습하면서 느낀 점
@@ -94,6 +100,53 @@ LS = f.readlines()  # 무한루프를 사용하는 것 보다 readlines를 사�
 for i in LS:
     print(i)
     
+f.close()
+
+
+
+"""
+"""
+# read 사용
+
+f = open("C:\\Users\\김해강\\Desktop\\A\\새파일.txt",'r')
+
+LS = f.read()  # 통 문장을 출력하려면 read 함수가 더 효율적
+print(LS)
+    
+f.close()
+
+
+"""
+
+"""
+# 파일 객체 사용
+
+f = open("C:\\Users\\김해강\\Desktop\\A\\새파일.txt",'r')
+
+for i in f:
+    print(i) # read 함수 사용할 필요도 없이 for 구문으로 전체 파일을 읽을 수 있다.
+        # 
+f.close()
+
+
+"""
+
+
+# 파일에 내용 추가 
+"""
+f = open("C:\\Users\\김해강\\Desktop\\A\\새파일.txt",'a')
+
+for i in range(1,21,1):
+    data = f"{i}번쩨 즐입니다.\n"
+    f.write(data)
+    
+f.close()
+
+f = open("C:\\Users\\김해강\\Desktop\\A\\새파일.txt",'r')
+
+a = f.read()
+
+print(a)
 f.close()
 
 """
