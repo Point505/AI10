@@ -12,3 +12,18 @@
 
 
 
+# 간단한 메모장 만들기
+
+
+import sys
+
+
+option = sys.argv[1]
+
+
+if option =='-a':
+    memo = sys.argv[2]
+    
+    f = open('meme.txt','a')
+    
+    
