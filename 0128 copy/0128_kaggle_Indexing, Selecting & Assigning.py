@@ -1,123 +1,112 @@
-# ==============================
+
 # ## 학습 내용
-# ==============================
-
+#
 # ### 오늘 학습한 챕터
-# - pandas 데이터 선택(Selection) 기초
-# - 컬럼 선택 (attribute / indexing)
-# - iloc, loc을 이용한 인덱싱
-# - 조건 기반 필터링
-# - 데이터 할당(Assigning data)
+# - pandas groupby()
+# - 집계 함수(count, min, max, agg)
+# - apply() 활용
+# - MultiIndex 개념
+# - reset_index()
+# - 데이터 정렬(sort_values, sort_index)
+#
 
-# ==============================
-# ### 주요 개념 정리
-# ==============================
-
-# - 컬럼 선택 방법
-#   1) reviews.country  → 속성 접근 방식
-#   2) reviews['country'] → 인덱싱 방식 (더 안전하고 일반적)
+# ## 실습 코드
 #
-# - iloc (index-based selection)
-#   : 행/열의 "위치(번호)" 기준으로 데이터 선택
-#   예) iloc[0], iloc[:, 0], iloc[1:3, 0]
-#
-# - loc (label-based selection)
-#   : 인덱스/컬럼 "이름(label)" 기준으로 데이터 선택
-#   예) loc[0, 'country'], loc[:, ['points', 'price']]
-#
-# - iloc vs loc 차이
-#   iloc → 끝 인덱스 미포함
-#   loc  → 끝 인덱스 포함
-#
-# - 조건 필터링
-#   비교 연산자(==, >= 등)로 boolean Series 생성 후 loc에 사용
-#   &, | 연산자로 조건 결합
-#
-# - isin()
-#   여러 값 중 하나에 해당하는지 필터링
-#
-# - isnull(), notnull()
-#   결측치(NaN) 여부 확인
-#
-# - 데이터 할당
-#   새로운 컬럼을 상수 또는 iterable로 추가 가능
-
-# ==============================
-# ### 실습 코드
-# ==============================
-
 import pandas as pd
 
-# CSV 파일 읽기 (기존 인덱스 사용)
-reviews = pd.read_csv(
-    "../input/wine-reviews/winemag-data-130k-v2.csv",
-    index_col=0
+
+# 1. 점수(points) 기준으로 그룹화 후 개수 세기
+# value_counts()와 동일한 동작
+
+points_count = reviews.groupby('points').points.count()
+print(points_count)
+
+
+# 2. 점수별 최저 가격 와인 확인
+
+min_price_by_points = reviews.groupby('points').price.min()
+print(min_price_by_points)
+
+
+# 3. 와이너리별 첫 번째 리뷰 와인 선택 (apply 사용)
+
+first_wine_by_winery = reviews.groupby('winery').apply(
+    lambda df: df.title.iloc[0]
 )
+print(first_wine_by_winery)
 
-# 1. 컬럼 선택 (Series 추출)
-countries_attr = reviews.country          # 속성 방식
-countries_index = reviews['country']       # 인덱싱 방식
 
-# 2. 단일 값 접근
-first_country = reviews['country'][0]
+# 4. 국가 + 주(province) 기준으로 최고 점수 와인 선택
+# idxmax(): 가장 높은 점수의 인덱스 반환
 
-# 3. iloc 사용 (위치 기반)
-first_row = reviews.iloc[0]                # 첫 번째 행
-country_column = reviews.iloc[:, 0]        # 첫 번째 컬럼
-first_three_countries = reviews.iloc[:3, 0]
-second_third = reviews.iloc[1:3, 0]
-last_five_rows = reviews.iloc[-5:]
+best_wine_by_country_province = reviews.groupby(
+    ['country', 'province']
+).apply(
+    lambda df: df.loc[df.points.idxmax()]
+)
+print(best_wine_by_country_province)
 
-# 4. loc 사용 (라벨 기반)
-first_country_loc = reviews.loc[0, 'country']
-selected_columns = reviews.loc[:, ['taster_name', 'taster_twitter_handle', 'points']]
 
-# 5. 인덱스 변경
-reviews_by_title = reviews.set_index('title')
+# 5. agg()를 사용한 여러 통계값 동시 계산
 
-# 6. 조건 필터링
-italy_wines = reviews.loc[reviews.country == 'Italy']
-italy_high_score = reviews.loc[
-    (reviews.country == 'Italy') & (reviews.points >= 90)
-]
+price_summary_by_country = reviews.groupby('country').price.agg(
+    ['len', 'min', 'max']
+)
+print(price_summary_by_country)
 
-# OR 조건
-italy_or_high_score = reviews.loc[
-    (reviews.country == 'Italy') | (reviews.points >= 90)
-]
 
-# 7. isin 사용
-italy_france = reviews.loc[
-    reviews.country.isin(['Italy', 'France'])
-]
+# 6. MultiIndex 예제
+# 국가 + 주 기준 리뷰 개수
 
-# 8. 결측치 필터링
-priced_wines = reviews.loc[reviews.price.notnull()]
+countries_reviewed = reviews.groupby(
+    ['country', 'province']
+).description.agg(['len'])
+print(countries_reviewed)
 
-# 9. 데이터 할당 (컬럼 추가)
-reviews['critic'] = 'everyone'              # 상수 값 할당
-reviews['index_backwards'] = range(len(reviews), 0, -1)
+# MultiIndex 확인
+print(type(countries_reviewed.index))
 
-# ==============================
+
+# 7. reset_index()
+# MultiIndex → 일반 DataFrame으로 변환
+
+countries_reviewed_reset = countries_reviewed.reset_index()
+print(countries_reviewed_reset)
+
+
+# 8. 값 기준 정렬 (오름차순)
+
+sorted_by_len = countries_reviewed_reset.sort_values(by='len')
+print(sorted_by_len)
+
+
+# 9. 값 기준 정렬 (내림차순)
+
+sorted_by_len_desc = countries_reviewed_reset.sort_values(
+    by='len',
+    ascending=False
+)
+print(sorted_by_len_desc)
+
+
+# 10. 인덱스 기준 정렬
+
+sorted_by_index = countries_reviewed_reset.sort_index()
+print(sorted_by_index)
+
+#
+# 11. 여러 컬럼 기준 정렬
+
+sorted_multi = countries_reviewed_reset.sort_values(
+    by=['country', 'len']
+)
+print(sorted_multi)
+
+
 # ## 💡 학습하면서 느낀 점
-# ==============================
-
-# - iloc과 loc의 차이를 이해하는 게 중요하다고 느꼈다.
-# - 조건 필터링을 사용하니 데이터에서 원하는 정보만 뽑아내는 게 가능해졌다.
-# - pandas가 데이터 분석에 왜 많이 쓰이는지 체감했다.
-
-# ==============================
-# ## ❓ 질문 및 궁금한 점
-# ==============================
-
-# - loc과 iloc 중 실무에서는 어떤 방식을 더 많이 쓰는지 궁금함
-# - 조건이 복잡해질 때 가독성을 높이는 방법은?
-
-# ==============================
-# ## ✅ 다음 학습 계획
-# ==============================
-
-# - 학습일: __________
-# - 회차: __________
-# - 다음 챕터: 데이터 요약과 통계
-#   (describe, mean, value_counts, sort_values)
+#
+# - groupby는 단순 집계가 아니라 데이터 분석의 핵심 도구라는 걸 느낌
+# - value_counts()의 내부 동작을 이해하게 됨
+# - apply()는 강력하지만 남용하면 느려질 수 있을 것 같음
+# - MultiIndex는 처음엔 헷갈리지만 reset_index()로 해결 가능
+# - 정렬을 통해 데이터의 의미가 더 잘 보임
