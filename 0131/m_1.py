@@ -147,4 +147,4 @@ print(students[2]["score"])
 students = [s for s in students if int(s["score"]) < 90]
 
 
-print(students)
+print(students)a
