@@ -1,26 +1,8 @@
 import plotly.express as px
-import plotly.graph_objects as go
 
-df = px.data.iris()
+df = px.data.tips()
 
-fig = px.scatter(
-    df,
-    x="sepal_width",
-    y="sepal_length",
-    color="species",
-    title="Using add_trace() with a Plotly Express Figure",
-)
+fig = px.histogram(df, x="sex", y ="tip", histfunc ='sum',facet_col='smoker')
 
-fig.add_trace(
-    go.Scatter(
-        x=[2, 4],
-        y=[4, 8],
-        mode="lines",
-        line=dict(color="gray"),
-        showlegend=False,
-    )
-)
+fig.update_xaxes(showline=True, linewidth=3, linecolor = 'black')
 
-fig.show()
-
-# pyhon -c "import plotry; print(plotly.__version__)"
